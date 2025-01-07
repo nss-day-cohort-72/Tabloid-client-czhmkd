@@ -12,7 +12,6 @@ export default function UserProfileList() {
     getUserProfiles();
   }, []);
 
-  console.log(userprofiles);
   return (
     <>
       <div className="ms-3">

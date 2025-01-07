@@ -4,6 +4,7 @@ import Login from "./auth/Login";
 import Register from "./auth/Register";
 import UserProfileList from "./userprofiles/UserProfilesList";
 import UserProfileDetails from "./userprofiles/UserProfileDetails";
+import PostList from "./posts/PostList";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   return (
@@ -33,6 +34,12 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
                 <UserProfileDetails />
               </AuthorizedRoute>
             }
+          />
+        </Route>
+        <Route path="/posts">
+          <Route
+            index
+            element={<PostList setLoggedInUser={setLoggedInUser} />}
           />
         </Route>
         <Route

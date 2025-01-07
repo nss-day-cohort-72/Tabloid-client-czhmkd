@@ -5,6 +5,7 @@ import Register from "./auth/Register";
 import UserProfileList from "./userprofiles/UserProfilesList";
 import UserProfileDetails from "./userprofiles/UserProfileDetails";
 import PostList from "./posts/PostList";
+import CategoriesList from "./categories/CategoriesList";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   return (
@@ -40,6 +41,12 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           <Route
             index
             element={<PostList setLoggedInUser={setLoggedInUser} />}
+          />
+        </Route>
+        <Route path="/categories">
+          <Route
+            index
+            element={<CategoriesList setLoggedInUser={setLoggedInUser} />}
           />
         </Route>
         <Route

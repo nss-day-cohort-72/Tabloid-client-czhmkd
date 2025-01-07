@@ -29,17 +29,19 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
             <Collapse isOpen={open} navbar>
               <Nav navbar>
                 {loggedInUser.roles.includes("Admin") && (
-                  <NavItem>
-                    <NavLink tag={RRNavLink} to="/userprofiles">
-                      User Profiles
-                    </NavLink>
-                  </NavItem>
+                  <div className="d-flex">
+                    <NavItem>
+                      <NavLink tag={RRNavLink} to="/userprofiles">
+                        User Profiles
+                      </NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink tag={RRNavLink} to="/categories">
+                        Categories
+                      </NavLink>
+                    </NavItem>
+                  </div>
                 )}
-                <NavItem>
-                  <NavLink tag={RRNavLink} to="/posts">
-                    Posts
-                  </NavLink>
-                </NavItem>
               </Nav>
             </Collapse>
             <Button

@@ -18,6 +18,7 @@ export default function PostList() {
       });
   }, []);
 
+  console.log(posts);
   if (loading) {
     return <h1>Loading...</h1>;
   }

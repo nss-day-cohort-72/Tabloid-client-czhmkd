@@ -27,15 +27,21 @@ export default function CategoriesList() {
   }
 
   return (
-    <div className="category-list">
-      <h2>Categories</h2>
+    <div className="category-list d-flex justify-content-center align-items-center col-12 mx-auto">
       {categories.length === 0 ? (
         <p>No Categories Available</p>
       ) : (
-        <ul className="list-group">
+        <ul className="list-group col-6">
           {categories.map((categories) => (
-            <li key={categories.id} className="list-group-item">
-              <h3>{categories.name}</h3>
+            <li
+              key={categories.id}
+              className="list-group-item d-flex justify-content-between align-items-center"
+            >
+              <h3 className="col-6">{categories.name}</h3>
+              <div className="button container col-6 d-flex justify-content-end">
+                <button className="me-3 btn btn-success">Edit</button>
+                <button className="btn btn-danger">Delete</button>
+              </div>
             </li>
           ))}
         </ul>

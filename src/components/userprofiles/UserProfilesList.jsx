@@ -11,15 +11,39 @@ export default function UserProfileList() {
   useEffect(() => {
     getUserProfiles();
   }, []);
+
+  console.log(userprofiles);
   return (
     <>
-      <p>User Profile List</p>
-      {userprofiles.map((p) => (
-        <p key={p.id}>
-          {p.firstName} {p.lastName} {p.userName}{" "}
-          <Link to={`/userprofiles/${p.id}`}>Details</Link>
-        </p>
-      ))}
+      <div className="ms-3">
+        <p className="ms-2">User Profile List</p>
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Username</th>
+              <th>Admin</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {userprofiles
+              .sort((a, b) => a.userName.localeCompare(b.userName))
+              .map((p) => (
+                <tr key={p.id}>
+                  <td>{p.firstName}</td>
+                  <td>{p.lastName}</td>
+                  <td>{p.userName}</td>
+                  <td>{p.roles.includes("Admin") ? "Yes" : "No"}</td>
+                  <td>
+                    <Link to={`/userprofiles/${p.id}`}>Details</Link>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
     </>
   );
 }

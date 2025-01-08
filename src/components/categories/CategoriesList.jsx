@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react";
-import { GetAllCategories } from "../../managers/categoryManager";
+import {
+  deleteCategory,
+  GetAllCategories,
+} from "../../managers/categoryManager";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function CategoriesList() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     GetAllCategories()
@@ -18,6 +24,16 @@ export default function CategoriesList() {
       });
   }, []);
 
+  const handleDelete = (id) => {
+    deleteCategory(id).then(() => {
+      GetAllCategories().then(setCategories);
+    });
+  };
+
+  const handleEditNav = (id) => {
+    navigate(`${id}/edit-category`);
+  };
+
   if (loading) {
     return <h1>Loading...</h1>;
   }
@@ -28,6 +44,9 @@ export default function CategoriesList() {
 
   return (
     <div className="category-list d-flex justify-content-center align-items-center col-12 mx-auto">
+      <h2>
+        <Link to="create-category">Add Category</Link>
+      </h2>
       {categories.length === 0 ? (
         <p>No Categories Available</p>
       ) : (
@@ -39,8 +58,18 @@ export default function CategoriesList() {
             >
               <h3 className="col-6">{categories.name}</h3>
               <div className="button container col-6 d-flex justify-content-end">
-                <button className="me-3 btn btn-success">Edit</button>
-                <button className="btn btn-danger">Delete</button>
+                <button
+                  className="me-3 btn btn-success"
+                  onClick={() => handleEditNav(categories.id)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => handleDelete(categories.id)}
+                >
+                  Delete
+                </button>
               </div>
             </li>
           ))}

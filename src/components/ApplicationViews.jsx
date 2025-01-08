@@ -7,6 +7,8 @@ import UserProfileDetails from "./userprofiles/UserProfileDetails";
 import PostList from "./posts/PostList";
 import PostDetails from "./posts/PostDetails";
 import CategoriesList from "./categories/CategoriesList";
+import { CreateCategory } from "./categories/CreateCategory";
+import { EditCategory } from "./categories/EditCategory";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   return (
@@ -56,6 +58,14 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           <Route
             index
             element={<CategoriesList setLoggedInUser={setLoggedInUser} />}
+          />
+          <Route
+            path="create-category"
+            element={<CreateCategory setLoggedInUser={setLoggedInUser} />}
+          />
+          <Route
+            path=":id/edit-category"
+            element={<EditCategory setLoggedInUser={setLoggedInUser} />}
           />
         </Route>
         <Route

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { GetAllApprovedPosts } from "../../managers/postManager";
 
 export default function PostList() {
@@ -18,7 +19,6 @@ export default function PostList() {
       });
   }, []);
 
-  console.log(posts);
   if (loading) {
     return <h1>Loading...</h1>;
   }
@@ -35,11 +35,17 @@ export default function PostList() {
       ) : (
         <ul className="list-group">
           {posts.map((post) => (
-            <li key={post.id} className="list-group-item">
-              <h3>{post.title}</h3>
-              <p>{post.category}</p>
-              <p>{post.author}</p>
-            </li>
+            <Link
+              to={`/posts/${post.id}`}
+              key={post.id}
+              className="list-group-item"
+            >
+              <li>
+                <h3>{post.title}</h3>
+                <p>Category: {post.category}</p>
+                <p>Author: {post.author}</p>
+              </li>
+            </Link>
           ))}
         </ul>
       )}

@@ -40,6 +40,11 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
                         Categories
                       </NavLink>
                     </NavItem>
+                    <NavItem>
+                      <NavLink tag={RRNavLink} to="/tags">
+                        Tag Management
+                      </NavLink>
+                    </NavItem>
                   </div>
                 )}
                 <NavItem>

@@ -9,6 +9,7 @@ import PostDetails from "./posts/PostDetails";
 import CategoriesList from "./categories/CategoriesList";
 import { CreateCategory } from "./categories/CreateCategory";
 import { EditCategory } from "./categories/EditCategory";
+import { TagsList } from "./tags/TagsList";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   return (
@@ -66,6 +67,16 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           <Route
             path=":id/edit-category"
             element={<EditCategory setLoggedInUser={setLoggedInUser} />}
+          />
+        </Route>
+        <Route path="/tags">
+          <Route
+            index
+            element={
+              <AuthorizedRoute loggedInUser={loggedInUser} roles={["Admin"]}>
+                <TagsList />
+              </AuthorizedRoute>
+            }
           />
         </Route>
         <Route

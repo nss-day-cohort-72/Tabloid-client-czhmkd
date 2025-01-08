@@ -10,6 +10,7 @@ import MyPosts from "./posts/MyPosts";
 import CategoriesList from "./categories/CategoriesList";
 import { CreateCategory } from "./categories/CreateCategory";
 import { EditCategory } from "./categories/EditCategory";
+import NewPost from "./posts/NewPost.jsx";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   return (
@@ -52,6 +53,17 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
             index
             element={
               <MyPosts
+                loggedInUser={loggedInUser}
+                setLoggedInUser={setLoggedInUser}
+              />
+            }
+          />
+        </Route>
+        <Route path="/posts/newpost">
+          <Route
+            index
+            element={
+              <NewPost
                 loggedInUser={loggedInUser}
                 setLoggedInUser={setLoggedInUser}
               />

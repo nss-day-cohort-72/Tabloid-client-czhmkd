@@ -32,7 +32,7 @@ export default function MyPosts({ loggedInUser }) {
   }
 
   return (
-    <div className="my-posts">
+    <div className="my-posts mx-auto text-center">
       <h1>My Posts</h1>
       {posts.length === 0 ? (
         <p>You do not have any posts yet!</p>

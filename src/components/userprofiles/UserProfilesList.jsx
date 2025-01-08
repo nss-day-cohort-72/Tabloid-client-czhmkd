@@ -36,6 +36,7 @@ export default function UserProfileList() {
                   <td>{p.userName}</td>
                   <td>{p.roles.includes("Admin") ? "Yes" : "No"}</td>
                   <td>
+                    <Link to={`${p.id}/edit-user`}>Edit</Link>{" "}
                     <Link to={`/userprofiles/${p.id}`}>Details</Link>
                   </td>
                 </tr>

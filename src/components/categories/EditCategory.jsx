@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, FormGroup, Input, Label } from "reactstrap";
-import {
-  createCategory,
-  editCategory,
-  getCategoryById,
-} from "../../managers/categoryManager";
+import { editCategory, getCategoryById } from "../../managers/categoryManager";
 
 export const EditCategory = () => {
   const { id } = useParams();

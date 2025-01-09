@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAllTags } from "../../managers/tagManager";
+import { deleteTag, getAllTags } from "../../managers/tagManager";
 import {
   Button,
   Container,
@@ -10,11 +10,14 @@ import {
   ListGroupItem,
 } from "reactstrap";
 import { CreateTag } from "./CreateTag";
+import { EditTagModal } from "./EditTag";
 
 export const TagsList = () => {
   const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [currentTag, setCurrentTag] = useState(null);
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -33,10 +36,32 @@ export const TagsList = () => {
 
   const toggleModal = () => setModalOpen(!modalOpen);
 
+  const toggleEditModal = () => setEditModalOpen(!editModalOpen);
+
   const handleTagCreated = (newTag) => {
     setTags((prevTags) =>
       [...prevTags, newTag].sort((a, b) => a.name.localeCompare(b.name))
     );
+  };
+
+  const handleTagUpdated = (id, updatedName) => {
+    setTags((prevTags) =>
+      prevTags.map((tag) =>
+        tag.id === id ? { ...tag, name: updatedName } : tag
+      )
+    );
+  };
+
+  const handleTagDeleted = async (id) => {
+    if (window.confirm("Are you sure you want to delete this tag")) {
+      try {
+        await deleteTag(id);
+        setTags((prevTags) => prevTags.filter((tag) => tag.id !== id));
+      } catch (error) {
+        console.error("Error deleting tag:", error);
+        alert("Failed to delete the tag.");
+      }
+    }
   };
 
   if (loading) {
@@ -59,8 +84,31 @@ export const TagsList = () => {
           </div>
           <ListGroup>
             {tags.map((tag) => (
-              <ListGroupItem key={tag.id} className="text-capitalize">
-                {tag.name}
+              <ListGroupItem
+                key={tag.id}
+                className="d-flex justify-content-between align-items-center"
+              >
+                <span className="text-capitalize">{tag.name}</span>
+                <div className="d-flex align-items-center">
+                  <Button
+                    color="warning"
+                    size="sm"
+                    className="me-2"
+                    onClick={() => {
+                      setCurrentTag(tag);
+                      toggleEditModal();
+                    }}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    color="danger"
+                    size="sm"
+                    onClick={() => handleTagDeleted(tag.id)}
+                  >
+                    Delete
+                  </Button>
+                </div>
               </ListGroupItem>
             ))}
           </ListGroup>
@@ -71,6 +119,14 @@ export const TagsList = () => {
         toggle={toggleModal}
         onTagCreated={handleTagCreated}
       />
+      {currentTag && (
+        <EditTagModal
+          isOpen={editModalOpen}
+          toggle={toggleEditModal}
+          tag={currentTag}
+          onTagUpdated={handleTagUpdated}
+        />
+      )}
     </Container>
   );
 };

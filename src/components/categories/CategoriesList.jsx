@@ -2,14 +2,16 @@ import { useEffect, useState } from "react";
 import {
   deleteCategory,
   GetAllCategories,
+  createCategory,
 } from "../../managers/categoryManager";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function CategoriesList() {
   const [categories, setCategories] = useState([]);
+  const [newCategory, setNewCategory] = useState({ name: "" });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,6 +36,18 @@ export default function CategoriesList() {
     navigate(`${id}/edit-category`);
   };
 
+  const handleAddCategory = (e) => {
+    e.preventDefault();
+    createCategory(newCategory).then((res) => {
+      if (res.errors) {
+        setErrors(res.errors);
+      } else {
+        setNewCategory({ name: "" });
+        GetAllCategories().then(setCategories);
+      }
+    });
+  };
+
   if (loading) {
     return <h1>Loading...</h1>;
   }
@@ -43,30 +57,28 @@ export default function CategoriesList() {
   }
 
   return (
-    <div className="category-list d-flex justify-content-center align-items-center col-12 mx-auto">
-      <h2>
-        <Link to="create-category">Add Category</Link>
-      </h2>
+    <div className="category-list d-flex flex-column justify-content-center align-items-center col-12 mx-auto mt-5">
+      <h2>Categories</h2>
       {categories.length === 0 ? (
         <p>No Categories Available</p>
       ) : (
-        <ul className="list-group col-6">
-          {categories.map((categories) => (
+        <ul className="list-group col-6 mb-4">
+          {categories.map((category) => (
             <li
-              key={categories.id}
+              key={category.id}
               className="list-group-item d-flex justify-content-between align-items-center"
             >
-              <h3 className="col-6">{categories.name}</h3>
+              <h3 className="col-6">{category.name}</h3>
               <div className="button container col-6 d-flex justify-content-end">
                 <button
                   className="me-3 btn btn-success"
-                  onClick={() => handleEditNav(categories.id)}
+                  onClick={() => handleEditNav(category.id)}
                 >
                   Edit
                 </button>
                 <button
                   className="btn btn-danger"
-                  onClick={() => handleDelete(categories.id)}
+                  onClick={() => handleDelete(category.id)}
                 >
                   Delete
                 </button>
@@ -75,6 +87,30 @@ export default function CategoriesList() {
           ))}
         </ul>
       )}
+
+      {/* Add Category Form Below the List */}
+      <form onSubmit={handleAddCategory} className="col-6">
+        <div className="mb-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Enter new category"
+            value={newCategory.name}
+            onChange={(e) => {
+              setNewCategory({ name: e.target.value });
+            }}
+          />
+        </div>
+        <button type="submit" className="btn btn-primary">
+          Add Category
+        </button>
+        {errors &&
+          Object.keys(errors).map((key) => (
+            <p key={key} style={{ color: "red" }}>
+              {key}: {errors[key].join(",")}
+            </p>
+          ))}
+      </form>
     </div>
   );
 }

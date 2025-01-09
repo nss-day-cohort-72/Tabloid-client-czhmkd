@@ -5,9 +5,12 @@ import Register from "./auth/Register";
 import UserProfileList from "./userprofiles/UserProfilesList";
 import UserProfileDetails from "./userprofiles/UserProfileDetails";
 import PostList from "./posts/PostList";
+import PostDetails from "./posts/PostDetails";
+import MyPosts from "./posts/MyPosts";
 import CategoriesList from "./categories/CategoriesList";
 import { EditCategory } from "./categories/EditCategory";
 import { EditUserProfile } from "./userprofiles/EditUserProfile";
+import NewPost from "./posts/NewPost.jsx";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   return (
@@ -53,6 +56,36 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
             element={<PostList setLoggedInUser={setLoggedInUser} />}
           />
         </Route>
+        <Route path="/posts/myposts">
+          <Route
+            index
+            element={
+              <MyPosts
+                loggedInUser={loggedInUser}
+                setLoggedInUser={setLoggedInUser}
+              />
+            }
+          />
+        </Route>
+        <Route path="/posts/newpost">
+          <Route
+            index
+            element={
+              <NewPost
+                loggedInUser={loggedInUser}
+                setLoggedInUser={setLoggedInUser}
+              />
+            }
+          />
+        </Route>
+        <Route
+          path="/posts/:postId"
+          element={
+            <AuthorizedRoute loggedInUser={loggedInUser}>
+              <PostDetails />
+            </AuthorizedRoute>
+          }
+        />
         <Route path="/categories">
           <Route
             index

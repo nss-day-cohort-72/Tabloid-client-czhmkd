@@ -9,8 +9,10 @@ import PostDetails from "./posts/PostDetails";
 import MyPosts from "./posts/MyPosts";
 import CategoriesList from "./categories/CategoriesList";
 import { EditCategory } from "./categories/EditCategory";
+import { TagsList } from "./tags/TagsList";
 import { EditUserProfile } from "./userprofiles/EditUserProfile";
 import NewPost from "./posts/NewPost.jsx";
+
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   return (
@@ -94,6 +96,16 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           <Route
             path=":id/edit-category"
             element={<EditCategory setLoggedInUser={setLoggedInUser} />}
+          />
+        </Route>
+        <Route path="/tags">
+          <Route
+            index
+            element={
+              <AuthorizedRoute loggedInUser={loggedInUser} roles={["Admin"]}>
+                <TagsList />
+              </AuthorizedRoute>
+            }
           />
         </Route>
         <Route

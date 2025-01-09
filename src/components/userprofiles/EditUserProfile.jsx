@@ -9,7 +9,11 @@ import {
   Row,
   Col,
 } from "reactstrap";
-import { editUser, getProfile } from "../../managers/userProfileManager";
+import {
+  editUser,
+  getProfile,
+  getProfiles,
+} from "../../managers/userProfileManager";
 
 export const EditUserProfile = () => {
   const { id } = useParams();
@@ -22,7 +26,12 @@ export const EditUserProfile = () => {
     imageLocation: "",
     roles: [],
   });
+  const [userProfiles, setUserProfiles] = useState();
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    getProfiles().then(setUserProfiles);
+  }, []);
 
   useEffect(() => {
     getProfile(id).then(setUser);
@@ -30,6 +39,17 @@ export const EditUserProfile = () => {
 
   const handleRoleToggle = () => {
     const userCopy = { ...user };
+
+    const remainingAdmins = userProfiles.filter(
+      (p) => p.roles.includes("Admin") && !p.id === id
+    );
+
+    // If the user is the last admin and the role is being removed, prevent it
+    if (userCopy.roles.includes("Admin") && remainingAdmins.length === 0) {
+      window.alert("Must always have one Admin");
+      return; // Do not change the role
+    }
+
     if (userCopy.roles.includes("Admin")) {
       userCopy.roles = [];
     } else {

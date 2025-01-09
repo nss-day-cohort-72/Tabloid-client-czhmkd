@@ -17,3 +17,12 @@ export const editUser = (id, newUser) => {
         body: JSON.stringify(newUser)
   });
 }
+
+export const toggleActivate = (id) => {
+  return fetch(`${_apiUrl}/${id}/toggle-activate`, {
+      method: "PUT",
+      headers:{
+          "Content-Type": "application/json",
+        }
+  });
+}

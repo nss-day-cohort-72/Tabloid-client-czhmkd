@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import { GetPostById } from "../../managers/postManager";
 
 export default function PostDetails() {
@@ -7,6 +7,7 @@ export default function PostDetails() {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     GetPostById(postId)
@@ -30,10 +31,14 @@ export default function PostDetails() {
     return <h1>Loading...</h1>;
   }
 
+  const handleEditClick = () => {
+    navigate(`/posts/${postId}/edit`);
+  };
+
   return (
     <div className="post-Details">
       <div className="col-12 border-bottom bg-secondary bg-gradient bg-opacity-25">
-        <div className=" mx-auto d-flex justify-content-center col-5">
+        <div className="mx-auto d-flex justify-content-center col-5">
           <img
             src={post.headerImage}
             alt=""
@@ -53,6 +58,13 @@ export default function PostDetails() {
       </div>
       <div className="col-6 mx-auto">
         <p>{post.content}</p>
+      </div>
+
+      {/* Edit Button */}
+      <div className="text-center my-4">
+        <button onClick={handleEditClick} className="btn btn-warning">
+          Edit Post
+        </button>
       </div>
     </div>
   );

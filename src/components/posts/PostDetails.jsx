@@ -5,6 +5,7 @@ import {
 } from "../../managers/commentManager";
 import { useParams, useNavigate } from "react-router";
 import { GetPostById, deletePost } from "../../managers/postManager";
+import { Badge } from "reactstrap";
 
 export default function PostDetails({ loggedInUser }) {
   const { postId } = useParams();
@@ -79,6 +80,10 @@ export default function PostDetails({ loggedInUser }) {
     }
   };
 
+  const handleManageTagsClick = () => {
+    navigate(`/posts/${postId}/tags`);
+  };
+
   return (
     <div className="post-Details">
       {/* Post details */}
@@ -105,90 +110,30 @@ export default function PostDetails({ loggedInUser }) {
         <p>{post.content}</p>
       </div>
 
-      {/* Add Comment Button */}
-      <div className="col-6 mx-auto mt-5">
-        <button
-          className="btn btn-primary"
-          onClick={() => setShowCommentForm(!showCommentForm)}
-        >
-          {showCommentForm ? "Cancel" : "Add a Comment"}
+      <div className="text-center my-4 d-flex justify-content-center gap-3">
+        <button onClick={handleEditClick} className="btn btn-warning">
+          Edit Post
         </button>
-
-        {/* Comment form (conditionally rendered) */}
-        {showCommentForm && (
-          <form onSubmit={handleCommentSubmit} className="mt-4">
-            <div className="mb-3">
-              <textarea
-                className="form-control"
-                rows="1"
-                placeholder="Subject"
-                value={newCommentObj.subject}
-                onChange={(e) => {
-                  const commentCopy = { ...newCommentObj };
-                  commentCopy.subject = e.target.value;
-                  setNewCommentObj(commentCopy);
-                }}
-              ></textarea>
-              <textarea
-                className="form-control"
-                rows="3"
-                placeholder="Write a comment..."
-                value={newCommentObj.content}
-                onChange={(e) => {
-                  const commentCopy = { ...newCommentObj };
-                  commentCopy.content = e.target.value;
-                  setNewCommentObj(commentCopy);
-                }}
-              ></textarea>
-            </div>
-            <button type="submit" className="btn btn-primary">
-              Submit Comment
-            </button>
-          </form>
-        )}
+        <button onClick={handleDeleteClick} className="btn btn-danger">
+          Delete Post
+        </button>
+        <button onClick={handleManageTagsClick} className="btn btn-primary">
+          Manage Tags
+        </button>
       </div>
-
-      {/* Comment section */}
-      <div className="col-6 mx-auto mt-5">
-        <h4>Comments</h4>
-        {comments.length === 0 ? (
-          <p>No comments yet. Be the first to comment!</p>
-        ) : (
-          <ul className="list-unstyled">
-            {comments.map((comment) => (
-              <li
-                key={comment.id}
-                className="border-bottom py-2 d-flex align-items-start"
-              >
-                {/* User Image */}
-                <img
-                  src={
-                    comment.userProfile.imageLocation || "default-avatar.png"
-                  }
-                  alt={comment.userProfile.fullName}
-                  className="rounded-circle me-3"
-                  style={{ width: "40px", height: "40px", objectFit: "cover" }}
-                />
-                {/* User Name and Comment Content */}
-                <div>
-                  <strong>{comment.userProfile.fullName}</strong>
-                  <p className="mb-1">{comment.content}</p>
-                  <small className="text-muted">
-                    {new Date(comment.createdAt).toLocaleString()}
-                  </small>
-                </div>
-              </li>
+      <div className="col-6 mx-auto">
+        <h5>Tags:</h5>
+        {post.tags && post.tags.length > 0 ? (
+          <div className="d-flex flex-wrap gap-2">
+            {post.tags.map((tag) => (
+              <Badge key={tag.id} color="info" pill>
+                {tag.name}
+              </Badge>
             ))}
-          </ul>
+          </div>
+        ) : (
+          <p>No tags associated with this post.</p>
         )}
-        <div className="text-center my-4 d-flex justify-content-center gap-3">
-          <button onClick={handleEditClick} className="btn btn-warning">
-            Edit Post
-          </button>
-          <button onClick={handleDeleteClick} className="btn btn-danger">
-            Delete Post
-          </button>
-        </div>
       </div>
     </div>
   );

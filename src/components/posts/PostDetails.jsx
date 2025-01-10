@@ -117,6 +117,23 @@ export default function PostDetails({ loggedInUser }) {
         <button onClick={handleDeleteClick} className="btn btn-danger">
           Delete Post
         </button>
+        <button onClick={handleManageTagsClick} className="btn btn-primary">
+          Manage Tags
+        </button>
+      </div>
+      <div className="col-6 mx-auto">
+        <h5>Tags:</h5>
+        {post.tags && post.tags.length > 0 ? (
+          <div className="d-flex flex-wrap gap-2">
+            {post.tags.map((tag) => (
+              <Badge key={tag.id} color="info" pill>
+                {tag.name}
+              </Badge>
+            ))}
+          </div>
+        ) : (
+          <p>No tags associated with this post.</p>
+        )}
       </div>
     </div>
   );

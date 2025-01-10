@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
-import { GetPostById } from "../../managers/postManager";
+import { GetPostById, deletePost } from "../../managers/postManager";
 
 export default function PostDetails() {
   const { postId } = useParams();
@@ -21,8 +21,6 @@ export default function PostDetails() {
       });
   }, [postId]);
 
-  console.log("this is the post at id", post);
-
   if (error) {
     return <p className="text-danger">Error: {error}</p>;
   }
@@ -33,6 +31,22 @@ export default function PostDetails() {
 
   const handleEditClick = () => {
     navigate(`/posts/${postId}/edit`);
+  };
+
+  const handleDeleteClick = async () => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this post?"
+    );
+    if (confirmDelete) {
+      try {
+        await deletePost(postId);
+        alert("Post deleted successfully.");
+        navigate("/posts");
+      } catch (err) {
+        console.error("Error deleting post:", err);
+        alert("Failed to delete the post. Please try again.");
+      }
+    }
   };
 
   return (
@@ -60,10 +74,12 @@ export default function PostDetails() {
         <p>{post.content}</p>
       </div>
 
-      {/* Edit Button */}
-      <div className="text-center my-4">
+      <div className="text-center my-4 d-flex justify-content-center gap-3">
         <button onClick={handleEditClick} className="btn btn-warning">
           Edit Post
+        </button>
+        <button onClick={handleDeleteClick} className="btn btn-danger">
+          Delete Post
         </button>
       </div>
     </div>

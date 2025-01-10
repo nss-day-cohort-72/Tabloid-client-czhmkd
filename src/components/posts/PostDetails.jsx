@@ -1,13 +1,34 @@
 import { useEffect, useState } from "react";
+import {
+  createComment,
+  getCommentByPostId,
+} from "../../managers/commentManager";
 import { useParams, useNavigate } from "react-router";
 import { GetPostById, deletePost } from "../../managers/postManager";
 import { Badge } from "reactstrap";
 
-export default function PostDetails() {
+export default function PostDetails({ loggedInUser }) {
   const { postId } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [comments, setComments] = useState([]);
+  const [newCommentObj, setNewCommentObj] = useState({
+    subject: "",
+    content: "",
+  });
+  const [showCommentForm, setShowCommentForm] = useState(false);
   const [error, setError] = useState(null);
+  const userId = loggedInUser ? loggedInUser.id : null;
+
+  console.log("loggedinuser", loggedInUser);
+
+  if (!loggedInUser) {
+    return <h1>Loading user data...</h1>;
+  }
+
+  useEffect(() => {
+    getCommentByPostId(parseInt(postId)).then(setComments);
+  }, [postId]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,6 +42,15 @@ export default function PostDetails() {
         setLoading(false);
       });
   }, [postId]);
+
+  const handleCommentSubmit = (e) => {
+    e.preventDefault();
+    createComment(parseInt(postId), newCommentObj, userId).then(() => {
+      getCommentByPostId(parseInt(postId)).then(setComments);
+      setNewCommentObj({ subject: "", content: "" });
+      setShowCommentForm(false);
+    });
+  };
 
   if (error) {
     return <p className="text-danger">Error: {error}</p>;
@@ -56,6 +86,7 @@ export default function PostDetails() {
 
   return (
     <div className="post-Details">
+      {/* Post details */}
       <div className="col-12 border-bottom bg-secondary bg-gradient bg-opacity-25">
         <div className="mx-auto d-flex justify-content-center col-5">
           <img
@@ -86,23 +117,6 @@ export default function PostDetails() {
         <button onClick={handleDeleteClick} className="btn btn-danger">
           Delete Post
         </button>
-        <button onClick={handleManageTagsClick} className="btn btn-primary">
-          Manage Tags
-        </button>
-      </div>
-      <div className="col-6 mx-auto">
-        <h5>Tags:</h5>
-        {post.tags && post.tags.length > 0 ? (
-          <div className="d-flex flex-wrap gap-2">
-            {post.tags.map((tag) => (
-              <Badge key={tag.id} color="info" pill>
-                {tag.name}
-              </Badge>
-            ))}
-          </div>
-        ) : (
-          <p>No tags associated with this post.</p>
-        )}
       </div>
     </div>
   );

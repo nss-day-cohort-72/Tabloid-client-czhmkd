@@ -15,6 +15,8 @@ import NewPost from "./posts/NewPost.jsx";
 import EditPost from "./posts/EditPost.jsx";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
+  console.log("Parent Component - loggedInUser:", loggedInUser);
+
   return (
     <Routes>
       <Route path="/">

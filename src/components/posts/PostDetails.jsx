@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
-import { GetPostById } from "../../managers/postManager";
 import {
   createComment,
   getCommentByPostId,
@@ -17,9 +15,15 @@ export default function PostDetails({ loggedInUser }) {
     subject: "",
     content: "",
   });
-  const [showCommentForm, setShowCommentForm] = useState(false); // State to toggle form visibility
+  const [showCommentForm, setShowCommentForm] = useState(false);
   const [error, setError] = useState(null);
-  const userId = loggedInUser.id;
+  const userId = loggedInUser ? loggedInUser.id : null;
+
+  console.log("loggedinuser", loggedInUser);
+
+  if (!loggedInUser) {
+    return <h1>Loading user data...</h1>;
+  }
 
   useEffect(() => {
     getCommentByPostId(parseInt(postId)).then(setComments);
@@ -43,7 +47,7 @@ export default function PostDetails({ loggedInUser }) {
     createComment(parseInt(postId), newCommentObj, userId).then(() => {
       getCommentByPostId(parseInt(postId)).then(setComments);
       setNewCommentObj({ subject: "", content: "" });
-      setShowCommentForm(false); // Hide the form after submitting
+      setShowCommentForm(false);
     });
   };
 

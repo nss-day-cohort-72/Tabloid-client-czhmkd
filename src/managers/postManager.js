@@ -63,3 +63,30 @@ export const createPost = (post) => {
     return res.json();
   });
 };
+
+export const editPost = (postId, post) => {
+  return fetch(`/api/posts/edit/${postId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(post),
+  }).then((res) => {
+    if (!res.ok) {
+      throw new Error(`Error updating post: ${res.status}`);
+    }
+  });
+};
+
+export const deletePost = (postId) => {
+  return fetch(`/api/posts/delete/${postId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((res) => {
+    if (!res.ok) {
+      throw new Error(`Error deleting post: ${res.status}`);
+    }
+  });
+};

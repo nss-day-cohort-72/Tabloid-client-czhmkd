@@ -5,6 +5,8 @@ import {
   createComment,
   getCommentByPostId,
 } from "../../managers/commentManager";
+import { useParams, useNavigate } from "react-router";
+import { GetPostById, deletePost } from "../../managers/postManager";
 
 export default function PostDetails({ loggedInUser }) {
   const { postId } = useParams();
@@ -22,7 +24,8 @@ export default function PostDetails({ loggedInUser }) {
   useEffect(() => {
     getCommentByPostId(parseInt(postId)).then(setComments);
   }, [postId]);
-
+  const navigate = useNavigate();
+  
   useEffect(() => {
     GetPostById(postId)
       .then((data) => {
@@ -51,6 +54,26 @@ export default function PostDetails({ loggedInUser }) {
   if (loading) {
     return <h1>Loading...</h1>;
   }
+
+  const handleEditClick = () => {
+    navigate(`/posts/${postId}/edit`);
+  };
+
+  const handleDeleteClick = async () => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this post?"
+    );
+    if (confirmDelete) {
+      try {
+        await deletePost(postId);
+        alert("Post deleted successfully.");
+        navigate("/posts");
+      } catch (err) {
+        console.error("Error deleting post:", err);
+        alert("Failed to delete the post. Please try again.");
+      }
+    }
+  };
 
   return (
     <div className="post-Details">
@@ -154,6 +177,13 @@ export default function PostDetails({ loggedInUser }) {
             ))}
           </ul>
         )}
+      <div className="text-center my-4 d-flex justify-content-center gap-3">
+        <button onClick={handleEditClick} className="btn btn-warning">
+          Edit Post
+        </button>
+        <button onClick={handleDeleteClick} className="btn btn-danger">
+          Delete Post
+        </button>
       </div>
     </div>
   );

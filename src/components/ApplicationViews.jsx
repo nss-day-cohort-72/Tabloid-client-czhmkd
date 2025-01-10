@@ -12,6 +12,7 @@ import { EditCategory } from "./categories/EditCategory";
 import { TagsList } from "./tags/TagsList";
 import { EditUserProfile } from "./userprofiles/EditUserProfile";
 import NewPost from "./posts/NewPost.jsx";
+import EditPost from "./posts/EditPost.jsx";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   return (
@@ -84,6 +85,18 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           element={
             <AuthorizedRoute loggedInUser={loggedInUser}>
               <PostDetails loggedInUser={loggedInUser} />
+            </AuthorizedRoute>
+          }
+        />
+        {/* New Edit Post Route */}
+        <Route
+          path="/posts/:postId/edit"
+          element={
+            <AuthorizedRoute loggedInUser={loggedInUser}>
+              <EditPost
+                loggedInUser={loggedInUser}
+                setLoggedInUser={setLoggedInUser}
+              />
             </AuthorizedRoute>
           }
         />

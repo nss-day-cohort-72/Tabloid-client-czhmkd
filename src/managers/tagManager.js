@@ -1,12 +1,14 @@
 export const getAllTags = async () => {
-  const response = await fetch("api/Tag");
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch tags.");
+  try {
+    const response = await fetch("/api/Tag");
+    if (!response.ok) {
+      throw new Error(`Failed to fetch tags. Status: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error in getAllTags:", error);
+    throw error;
   }
-
-  const data = await response.json();
-  return data;
 };
 
 export const createTag = async (tag) => {
@@ -70,4 +72,26 @@ export const deleteTag = async (id) => {
     console.error("Error in deleteTag:", error);
     throw error;
   }
+};
+
+export const getTagsByPostId = async (postId) => {
+  const response = await fetch(`/api/PostTag/${postId}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch tags for the post.");
+  }
+  return response.json();
+};
+
+export const addTagsToPost = async (postId, tagIds) => {
+  const response = await fetch(`/api/PostTag`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ postId, tagIds }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to associate tags with the post.");
+  }
+
+  return await response.json();
 };

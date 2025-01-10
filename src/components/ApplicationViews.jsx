@@ -13,6 +13,7 @@ import { TagsList } from "./tags/TagsList";
 import { EditUserProfile } from "./userprofiles/EditUserProfile";
 import NewPost from "./posts/NewPost.jsx";
 import EditPost from "./posts/EditPost.jsx";
+import { TagsForPost } from "./tags/TagsForPost.jsx";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   return (
@@ -80,6 +81,14 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
             }
           />
         </Route>
+        <Route
+          path="/posts/:postId/tags"
+          element={
+            <AuthorizedRoute loggedInUser={loggedInUser}>
+              <TagsForPost />
+            </AuthorizedRoute>
+          }
+        />
         <Route
           path="/posts/:postId"
           element={

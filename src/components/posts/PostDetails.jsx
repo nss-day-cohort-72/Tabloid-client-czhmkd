@@ -25,7 +25,7 @@ export default function PostDetails({ loggedInUser }) {
     getCommentByPostId(parseInt(postId)).then(setComments);
   }, [postId]);
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     GetPostById(postId)
       .then((data) => {
@@ -177,13 +177,14 @@ export default function PostDetails({ loggedInUser }) {
             ))}
           </ul>
         )}
-      <div className="text-center my-4 d-flex justify-content-center gap-3">
-        <button onClick={handleEditClick} className="btn btn-warning">
-          Edit Post
-        </button>
-        <button onClick={handleDeleteClick} className="btn btn-danger">
-          Delete Post
-        </button>
+        <div className="text-center my-4 d-flex justify-content-center gap-3">
+          <button onClick={handleEditClick} className="btn btn-warning">
+            Edit Post
+          </button>
+          <button onClick={handleDeleteClick} className="btn btn-danger">
+            Delete Post
+          </button>
+        </div>
       </div>
     </div>
   );
